@@ -39,3 +39,27 @@ buzzrem.(13)
 buzzrem.(14)
 buzzrem.(15)
 buzzrem.(16)
+
+#functions can return functions
+greeter = fn name -> (fn -> "Hello #{name}" end) end
+IO.puts(greeter.("pi").())
+
+add_n = fn n -> (fn n2 -> n + n2 end) end
+IO.puts(add_n.(3).(5))
+
+prefix = fn string1 ->
+	fn string2 -> string1 <> " " <> string2 end
+end
+
+IO.puts(prefix.("Elixir").("Rock"))
+
+#functions as arguments
+
+times_2 = fn n -> n * 2 end
+apply = fn (fun, value) -> fun.(value) end
+
+IO.puts(apply.(times_2, 6))
+
+list = [1, 2, 5, 6]
+map = Enum.map list, fn elem -> elem * 2 end
+IO.inspect(map)
