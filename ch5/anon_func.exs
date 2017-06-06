@@ -63,3 +63,36 @@ IO.puts(apply.(times_2, 6))
 list = [1, 2, 5, 6]
 map = Enum.map list, fn elem -> elem * 2 end
 IO.inspect(map)
+
+#Pinned valuers and functions parameter
+
+defmodule Greeter do
+	
+	def for(name, greeting) do
+		fn
+			(^name) -> "#{greeting} #{name}"
+			(_) -> "I don't know you"
+		end
+	end
+end
+
+gret = Greeter.for("Pi", "Yo!")
+
+IO.puts gret.("Pi")
+IO.puts gret.("Dave")
+
+# the & operator
+
+rnd = &(Float.round(&1, &2))
+IO.inspect(rnd.(2.233442, 2))
+
+l = &length/1
+IO.inspect(l.([1,2,3,4]))
+
+IO.inspect(Enum.map [1,2,3,4], &(&1 + 1))
+
+map = &Enum.map/2
+IO.inspect(map.([1,2,3], &(&1 + 2)))
+
+each = &Enum.each/2
+each.(["Hi", "hello"], &(IO.inspect(&1)))
