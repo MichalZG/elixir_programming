@@ -33,8 +33,38 @@ IO.inspect(deck)
 
 deck |> Enum.shuffle |> Enum.take(14) |> IO.inspect
 
-defmodule MyEnum do
-	def all(list, fun) do
-		
-	end	
+
+defmodule Enum2 do
+
+	def all?([], _), do: true
+	def all?([ head | tail ], fun) do
+		fun.(head) && Enum2.all?(tail, fun)
+	end
+
+	def each([], _), do: :ok
+	def each([ head | tail ], fun) do
+		fun.(head)
+		Enum2.each(tail, fun)
+	end
+
+	def filter([], _), do: []
+	def filter([ head | tail ], fun) do
+		if fun.(head) do
+			[ head | filter(tail,fun) ]
+		else 
+			filter(tail, fun)
+		end
+	end
+
 end
+
+
+IO.inspect(
+	Enum2.all?([1, 2, 3], &(&1 < 4)))
+
+
+IO.inspect(
+	Enum2.each(["a", "b", "c"], fn(x) -> IO.puts(x) end))
+
+IO.inspect(
+	Enum2.filter([1, 2, 3, 5, 6], &(&1 < 3)))
