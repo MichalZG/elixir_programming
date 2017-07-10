@@ -56,7 +56,35 @@ defmodule Enum2 do
 		end
 	end
 
+	def split([ head | tail ], count) when count > 0 do
+		{left, right} = split(tail, count - 1)
+		{[ head | left ], right}
+	end
+
+	def split(list, _) do
+		{[], list}
+	end
+
+	def split2(list, count) when count >= 0 do
+		_split2(list, count, [])
+	end
+
+	def split2(list, count) when count < 0 do
+		_split2(list, count+length(list)-1, [])
+	end
+
+	defp _split2([ head | tail ], count, out) when count > 0 do
+		_split2(tail, count-1, out ++ [head])
+	end
+
+	defp _split2([ _head | tail ], _count, out), do: {out, tail}
+
+	def take([ head | tail ], count) when count > 0 do
+		[ head | take(tail, count-1)]
+	end
+	def take(_, _), do: []
 end
+
 
 
 IO.inspect(
@@ -67,4 +95,13 @@ IO.inspect(
 	Enum2.each(["a", "b", "c"], fn(x) -> IO.puts(x) end))
 
 IO.inspect(
-	Enum2.filter([1, 2, 3, 5, 6], &(&1 < 3)))
+	Enum2.filter([1, 2, 3, 4, 5, 6, 7, 8], &(&1 < 6)))
+
+
+Enum2.split([1, 2, 3, 4, 5, 6, 7, 8], 6) |> IO.inspect(char_lists: :as_lists)
+
+IO.inspect(
+	Enum2.split2([1, 2, 3, 4, 5, 6, 7, 8], -4))
+
+IO.inspect(
+	Enum2.take([1, 2, 3, 4, 5, 6, 7, 8], 4))
