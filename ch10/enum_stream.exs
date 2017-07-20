@@ -56,7 +56,7 @@ defmodule Enum2 do
 		end
 	end
 
-	def split([ head | tail ], count) when count > 0 do
+	def split([ head | tail ], count) when count > 0 do 
 		{left, right} = split(tail, count - 1)
 		{[ head | left ], right}
 	end
