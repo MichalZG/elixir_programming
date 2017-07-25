@@ -26,3 +26,13 @@ Stream.repeatedly(&:random.uniform/0) |> Enum.take(3) |> IO.inspect
 
 #Stream.iterate
 Stream.iterate(2, &(&1*&1)) |> Enum.take(5) |> IO.inspect
+
+Stream.resource(fn -> File.open!("test.dat") end,
+				fn file ->
+					case IO.read(file, :line) do
+						data when is_binary(data) -> {[data], file}
+						_ -> {:halt, file}
+					end
+				end,
+				fn file -> File.close(file) end) 
+|> Enum.take(5) |> IO.inspect
